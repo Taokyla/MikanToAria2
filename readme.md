@@ -12,7 +12,7 @@
 */30 * * * * python MikanToAria2/main.py
 ```
 
-###config.yml说明
+### config.yml 说明
 
 #### aria2
 
