@@ -16,6 +16,7 @@ torrents_save_dir = os.path.join(workspace, 'torrents')
 if not os.path.exists(torrents_save_dir):
     os.makedirs(torrents_save_dir)
 
+
 def load_config():
     if os.path.exists(config_path):
         return yaml.safe_load(open(config_path, encoding='utf8'))
@@ -49,11 +50,12 @@ cache = []
 agent = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"}
 
 client = aria2p.API(aria2p.Client(**config['aria2']))
+base_dir = client.get_global_options().get('dir')
 
 
-def aria2(url):
+def aria2(url, dir):
     if url.startswith("magnet:?xt="):
-        client.add_magnet(url)
+        client.add_magnet(url, options={'dir': f'{base_dir}/{dir}'})
     else:
         _, filename = os.path.split(url)
         filename = os.path.join(torrents_save_dir, filename)
@@ -62,13 +64,17 @@ def aria2(url):
                 resp = session.get(url, headers=agent)
                 with open(filename, 'wb') as w:
                     w.write(resp.content)
-        client.add_torrent(filename)
+        client.add_torrent(filename, options={'dir': f'{base_dir}/{dir}'})
 
 
-def get_latest(url, rule=None):
+def get_latest(url, rule=None, savedir=None):
     entries = feedparser.parse(url, request_headers=agent)
+    if savedir:
+        bangumi_name = savedir
+    else:
+        bangumi_name = entries['feed']['title'][16:]
     for entry in entries['entries']:
-        title = entry['title']
+        title = entry['title'].strip()
         if rule:
             if not re.search(rule, title):
                 continue
@@ -78,7 +84,7 @@ def get_latest(url, rule=None):
                 if link['type'] == 'application/x-bittorrent':
                     download_url = link['href']
             if download_url:
-                aria2(download_url)
+                aria2(download_url, bangumi_name)
                 history.append(title)
                 cache.append(title)
         else:
@@ -102,7 +108,10 @@ def run():
         rule = bangumi.get('rule')
         if rule == '':
             rule = None
-        get_latest(url, rule=rule)
+        savedir = bangumi.get('savedir')
+        if savedir == '':
+            savedir = None
+        get_latest(url, rule=rule,savedir=savedir)
     if len(cache) > 0:
         write_history('\n'.join(cache[::-1]))
 

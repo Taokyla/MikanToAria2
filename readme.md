@@ -22,10 +22,11 @@
 
 -`secret` rpc密码
 
+
 #### mikan
 
 -`url` rss订阅链接，例如：https://mikanani.me/RSS/Bangumi?bangumiId=2359&subgroupid=370
 
 -`rule` 可选，正则匹配，会匹配title，符合的才会下载
 
-
+-`savedir` 可选，动画的保存路径，默认为番名

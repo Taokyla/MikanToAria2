@@ -4,5 +4,6 @@ aria2:
   secret: 'key'
 mikan:
   - url: 'https://mikanani.me/RSS/Bangumi?bangumiId=2518&subgroupid=370'
+    savedir: '转生史莱姆'
   - url: 'https://mikanani.me/RSS/Bangumi?bangumiId=2359&subgroupid=562'
     rule: '1080p.*CHS'
