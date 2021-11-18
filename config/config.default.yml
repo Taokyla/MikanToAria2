@@ -7,3 +7,5 @@ mikan:
     savedir: '转生史莱姆'
   - url: 'https://mikanani.me/RSS/Bangumi?bangumiId=2359&subgroupid=562'
     rule: '1080p.*CHS'
+  - url: 'https://mikanani.me/RSS/Bangumi?bangumiId=2359&subgroupid=562'
+    enable: false

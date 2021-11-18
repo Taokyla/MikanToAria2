@@ -106,6 +106,9 @@ def run():
     for bangumi in config['mikan']:
         url = bangumi['url']
         rule = bangumi.get('rule')
+        enable = bangumi.get('enable',True)
+        if not enable:
+            continue
         if rule == '':
             rule = None
         savedir = bangumi.get('savedir')
