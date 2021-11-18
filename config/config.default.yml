@@ -2,6 +2,9 @@ aria2:
   host: 'http://127.0.0.1'
   port: 6800
   secret: 'key'
+proxy:
+  http: 'socks5://127.0.0.1:1080'
+  https: 'socks5://127.0.0.1:1080'
 mikan:
   - url: 'https://mikanani.me/RSS/Bangumi?bangumiId=2518&subgroupid=370'
     savedir: '转生史莱姆'

@@ -68,7 +68,12 @@ def aria2(url, dir):
 
 
 def get_latest(url, rule=None, savedir=None):
-    entries = feedparser.parse(url, request_headers=agent)
+    if config.get('proxy'):
+        proxies = config['proxy']
+        content = requests.get(url, headers=agent, proxies=proxies).content
+        entries = feedparser.parse(content)
+    else:
+        entries = feedparser.parse(url, request_headers=agent)
     if savedir:
         bangumi_name = savedir
     else:
@@ -106,7 +111,7 @@ def run():
     for bangumi in config['mikan']:
         url = bangumi['url']
         rule = bangumi.get('rule')
-        enable = bangumi.get('enable',True)
+        enable = bangumi.get('enable', True)
         if not enable:
             continue
         if rule == '':
@@ -114,7 +119,7 @@ def run():
         savedir = bangumi.get('savedir')
         if savedir == '':
             savedir = None
-        get_latest(url, rule=rule,savedir=savedir)
+        get_latest(url, rule=rule, savedir=savedir)
     if len(cache) > 0:
         write_history('\n'.join(cache[::-1]))
 
