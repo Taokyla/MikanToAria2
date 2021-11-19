@@ -52,6 +52,10 @@ agent = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/53
 client = aria2p.API(aria2p.Client(**config['aria2']))
 base_dir = client.get_global_options().get('dir')
 
+session = requests.session()
+if config.get('proxy'):
+    session.proxies = config['proxy']
+session.headers = agent
 
 def aria2(url, dir):
     if url.startswith("magnet:?xt="):
@@ -60,20 +64,15 @@ def aria2(url, dir):
         _, filename = os.path.split(url)
         filename = os.path.join(torrents_save_dir, filename)
         if not os.path.exists(filename):
-            with requests.Session() as session:
-                resp = session.get(url, headers=agent)
-                with open(filename, 'wb') as w:
-                    w.write(resp.content)
+            resp = session.get(url)
+            with open(filename, 'wb') as w:
+                w.write(resp.content)
         client.add_torrent(filename, options={'dir': f'{base_dir}/{dir}'})
 
 
 def get_latest(url, rule=None, savedir=None):
-    if config.get('proxy'):
-        proxies = config['proxy']
-        content = requests.get(url, headers=agent, proxies=proxies).content
-        entries = feedparser.parse(content)
-    else:
-        entries = feedparser.parse(url, request_headers=agent)
+    content = session.get(url).content
+    entries = feedparser.parse(content)
     if savedir:
         bangumi_name = savedir
     else:
