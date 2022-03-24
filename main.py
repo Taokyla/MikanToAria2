@@ -27,7 +27,7 @@ def load_config():
 
 config = load_config()
 
-MAX_HISTORY = max(MAX_HISTORY, len(config.get('mikan', [])) * 48)
+MAX_HISTORY = max(MAX_HISTORY, len(list(filter(lambda d:d.get('enable',True),config.get('mikan', [])))) * 48)
 
 
 def load_history():
