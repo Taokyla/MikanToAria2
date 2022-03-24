@@ -25,14 +25,14 @@ def load_config():
 
 
 def load_history():
-    h = []
+    h = set()
     if os.path.exists(history_path):
         with open(history_path, encoding='utf8') as f:
             for line in f:
                 bang = line.strip()
                 if bang == '':
                     continue
-                h.append(bang)
+                h.add(bang)
                 if len(h) >= MAX_HISTORY:
                     break
     else:
@@ -43,7 +43,7 @@ def load_history():
 
 config = load_config()
 
-history = load_history()
+downloaded_history = load_history()
 
 cache = []
 
@@ -71,6 +71,7 @@ def aria2(url, dir):
 
 
 def get_latest(url, rule=None, savedir=None):
+    bangumi_cache = set()
     content = session.get(url).content
     entries = feedparser.parse(content)
     if savedir:
@@ -82,17 +83,18 @@ def get_latest(url, rule=None, savedir=None):
         if rule:
             if not re.search(rule, title):
                 continue
-        if title not in history:
+        if title not in downloaded_history and title not in bangumi_cache:
             download_url = None
             for link in entry['links']:
                 if link['type'] == 'application/x-bittorrent':
                     download_url = link['href']
             if download_url:
                 aria2(download_url, bangumi_name)
-                history.append(title)
+                bangumi_cache.add(title)
                 cache.append(title)
         else:
-            break
+            continue
+    downloaded_history.update(bangumi_cache)
 
 
 def write_history(line):
