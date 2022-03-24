@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-import re
-import feedparser
-import aria2p
-import yaml
 import os
+import re
+
+import aria2p
+import feedparser
 import requests
+import yaml
 
 MAX_HISTORY = 300
 
@@ -24,6 +25,11 @@ def load_config():
         raise RuntimeError('config not found!')
 
 
+config = load_config()
+
+MAX_HISTORY = max(MAX_HISTORY, len(config.get('mikan', [])) * 48)
+
+
 def load_history():
     h = set()
     if os.path.exists(history_path):
@@ -41,8 +47,6 @@ def load_history():
     return h
 
 
-config = load_config()
-
 downloaded_history = load_history()
 
 cache = []
@@ -56,6 +60,7 @@ session = requests.session()
 if config.get('proxy'):
     session.proxies = config['proxy']
 session.headers = agent
+
 
 def aria2(url, dir):
     if url.startswith("magnet:?xt="):
@@ -98,7 +103,7 @@ def get_latest(url, rule=None, savedir=None):
 
 
 def write_history(line):
-    '''把最新的历史写在最前方'''
+    """把最新的历史写在最前方"""
     line = line.strip()
     if line == '':
         return
