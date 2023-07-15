@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "mikantoaria2"
+version = "0.1.0"
+description = ""
+authors = ["taokyla <seeyouking@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aria2p = "^0.11.3"
+feedparser = "^6.0.10"
+pyaml = "^23.7.0"
+requests = "^2.31.0"
+pysocks = "^1.7.1"
+loguru = "^0.7.0"
+
+
+[[tool.poetry.source]]
+name = "ustc"
+url = "https://pypi.mirrors.ustc.edu.cn/simple/"
+priority = "default"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
