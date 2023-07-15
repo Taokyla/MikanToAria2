@@ -44,7 +44,7 @@ if torrent_dir := os.getenv("MTA_TORRENTS_DIR"):
     torrents_save_dir = Path(torrent_dir)
 else:
     torrents_save_dir = workspace.joinpath("torrents")
-logger.info(f"us torrent dir: {torrents_save_dir.as_posix()}")
+logger.info(f"use torrent dir: {torrents_save_dir.as_posix()}")
 torrents_save_dir.parent.mkdir(parents=True, exist_ok=True)
 
 MAX_HISTORY = os.getenv("MTA_MAX_HISTORY", max(300, len([filter(lambda d: d.get('enable', True), config.get('mikan', []))]) * 48))
