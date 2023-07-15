@@ -1,7 +1,22 @@
+<div align="center">
+
 # Mikan to Aria2
+
 读取蜜柑计划的rss订阅，下载最新的动画！
 
+</div>
+
 ---
+
+**需要 python > 3.10**
+
+海象运算符 yes! `:=`
+
+以前用树莓派的时候写的小脚本，现在我已经不用了。
+
+## 推荐
+
+[Auto_Bangumi](https://github.com/EstrellaXD/Auto_Bangumi) 基于 [Mikan Project](https://mikanani.me)、[qBittorrent](https://qbittorrent.org) 的全自动追番整理下载工具。只需要在 [Mikan Project](https://mikanani.me) 上订阅番剧，就可以全自动追番。并且整理完成的名称和目录可以直接被 [Plex]()、[Jellyfin]() 等媒体库软件识别，无需二次刮削。
 
 ## 使用方式
 
@@ -48,7 +63,6 @@
 - `rule` 可选，正则匹配，会匹配title，符合的才会下载
 
 - `savedir` 可选，动画的保存路径，默认为番名
-
 
 ### Tip
 
